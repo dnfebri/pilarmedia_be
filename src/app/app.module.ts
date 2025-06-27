@@ -10,6 +10,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import type { RedisClientOptions } from 'redis';
 import { AllConfigType } from 'src/shared/config/config.type';
 import { AppAdminModule } from 'src/app-admin/module';
+import { AppUserModule } from 'src/app-user/module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AppAdminModule } from 'src/app-admin/module';
       inject: [ConfigService],
     }),
     ...AppAdminModule,
+    ...AppUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
