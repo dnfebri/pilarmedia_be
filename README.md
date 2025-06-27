@@ -1,3 +1,23 @@
+# Setup instructions
+
+1. Clone aplikasi
+2. Copy file env.example to .env
+3. Siapkan docker dan jalankan docker "compose up -d"
+4. Create database sesuaikan dengan "DATABASE_NAME" yang ada di .env
+5. intall aplikasi "yarn install"
+6. jalan kan perintah di terminal
+
+- yarn migration:run
+- yarn seed:run
+
+7. jalankan aplikasi "yarn start:dev" aplikasi akan berjalan di port 9000
+8. untuk documentasi API bisa di akses di
+
+- http://localhost:9000/docs/user
+- http://localhost:9000/docs/admin
+
+#
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
