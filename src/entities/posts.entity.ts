@@ -1,5 +1,6 @@
 import { EntityHelper } from 'src/shared/utils/entity-helper';
 import {
+  BeforeInsert,
   Column,
   Entity,
   ManyToOne,
@@ -8,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { CommentsPost } from './commentsPost.entity';
+import { generateRandomString } from 'src/shared/utils/random-string';
 
 @Entity()
 export class Posts extends EntityHelper {
@@ -25,6 +27,11 @@ export class Posts extends EntityHelper {
 
   @Column({ type: 'text' })
   like: string;
+
+  @BeforeInsert()
+  slugify() {
+    this.slug = `${this.title.toLowerCase().replace(/ /g, '-')}-${generateRandomString(5)}`;
+  }
 
   @ManyToOne(() => User, (user) => user.posts)
   author: User;
