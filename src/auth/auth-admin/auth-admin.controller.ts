@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -42,7 +43,7 @@ export class AuthAdminController {
   }
 
   @ApiBearerAuth()
-  @Post('/logout')
+  @Delete('/logout')
   @UseGuards(AuthAdminGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@SessionUser() user: Admin): Promise<TOkResponse<void>> {

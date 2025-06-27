@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -52,7 +53,7 @@ export class AuthUserController {
   }
 
   @ApiBearerAuth()
-  @Post('/logout')
+  @Delete('/logout')
   @UseGuards(AuthUserGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@SessionUser() user: User): Promise<TOkResponse<void>> {
