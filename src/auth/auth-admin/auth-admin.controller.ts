@@ -22,7 +22,6 @@ import { NullableType } from 'src/types/nullable.type';
 export class AuthAdminController {
   constructor(private readonly authAdminService: AuthAdminService) {}
 
-  @SerializeOptions({ groups: ['me'] })
   @Post('/login')
   @HttpCode(HttpStatus.OK)
   async adminLogin(
@@ -32,14 +31,13 @@ export class AuthAdminController {
   }
 
   @ApiBearerAuth()
-  @SerializeOptions({ groups: ['admin'] })
+  @SerializeOptions({ groups: ['me'] })
   @Get('/me')
   @UseGuards(AuthAdminGuard)
   @HttpCode(HttpStatus.OK)
   async admin(
     @SessionUser() user: Admin,
   ): Promise<TOkResponse<NullableType<Admin>>> {
-    console.log(user);
     return OkTransform(await this.authAdminService.me(user.id));
   }
 

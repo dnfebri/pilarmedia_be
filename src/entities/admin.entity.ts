@@ -15,13 +15,14 @@ import { make } from 'src/shared/utils/hash';
 
 @Entity()
 export class Admin extends EntityHelper {
-  @Expose({ groups: ['admin', 'me'] })
+  @Expose({ groups: ['me'] })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
   avatar?: string;
 
+  @Expose({ groups: ['admin', 'me'] })
   @Column()
   name: string;
 

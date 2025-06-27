@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AllConfigType } from './shared/config/config.type';
-import { VersioningType } from '@nestjs/common';
+import { ClassSerializerInterceptor, VersioningType } from '@nestjs/common';
 import { Swagger } from './swaggerModul';
 
 async function bootstrap() {
@@ -17,6 +17,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   Swagger(app);
 
