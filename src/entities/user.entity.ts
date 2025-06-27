@@ -9,9 +9,12 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { make } from 'src/shared/utils/hash';
+import { Posts } from './posts.entity';
+import { CommentsPost } from './commentsPost.entity';
 
 @Entity()
 export class User extends EntityHelper {
@@ -52,4 +55,10 @@ export class User extends EntityHelper {
   @Expose({ groups: ['admin'] })
   @Column(() => DeletedTrail, { prefix: false })
   deleted_trail: DeletedTrail;
+
+  @OneToMany(() => Posts, (post) => post.author)
+  posts: Posts[];
+
+  @OneToMany(() => CommentsPost, (comment) => comment.author)
+  comments: CommentsPost[];
 }
