@@ -26,6 +26,9 @@ export class Posts extends EntityHelper {
   content: string;
 
   @Column({ type: 'text' })
+  tags: string;
+
+  @Column({ type: 'text' })
   like: string;
 
   @BeforeInsert()
