@@ -23,11 +23,13 @@ export class PostService {
   }
 
   async createPost(postDto: PostCreateDto, user: User) {
+    const tags = postDto.tags.join(',');
     return await this.postRepository.save(
       this.postRepository.create({
         like: JSON.stringify([]),
         ...postDto,
         author: user,
+        tags,
       }),
     );
   }
