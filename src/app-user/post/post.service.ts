@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Posts } from 'src/entities/posts.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { PostCreateDto } from './dto/postCreate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
@@ -11,18 +11,24 @@ export class PostService {
     @InjectRepository(Posts) private postRepository: Repository<Posts>,
   ) {}
 
-  async findAllByUser(user: User) {
+  async findAllByUser(where: FindOptionsWhere<Posts>): Promise<Posts[]> {
     return await this.postRepository.find({
-      where: {
-        author: { id: user.id },
-      },
+      where,
       order: {
         id: 'DESC',
       },
     });
   }
 
-  async createPost(postDto: PostCreateDto, user: User) {
+  async findOne(where: FindOptionsWhere<Posts>): Promise<Posts> {
+    const post = await this.postRepository.findOne({
+      where,
+    });
+    if (!post) throw new NotFoundException('Post not found');
+    return post;
+  }
+
+  async createPost(postDto: PostCreateDto, user: User): Promise<Posts> {
     const tags = postDto.tags.join(',');
     return await this.postRepository.save(
       this.postRepository.create({

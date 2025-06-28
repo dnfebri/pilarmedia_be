@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
@@ -28,7 +29,17 @@ export class PostController {
   async findAllByUser(
     @SessionUser() user: User,
   ): Promise<TOkResponse<Posts[]>> {
-    return OkTransform(await this.postService.findAllByUser(user));
+    return OkTransform(
+      await this.postService.findAllByUser({ author: { id: user.id } }),
+    );
+  }
+
+  @Get(':slug')
+  @HttpCode(HttpStatus.OK)
+  async findOneBySlug(
+    @Query('slug') slug: string,
+  ): Promise<TOkResponse<Posts>> {
+    return OkTransform(await this.postService.findOne({ slug }));
   }
 
   @Post()
