@@ -34,6 +34,12 @@ export class PostController {
     );
   }
 
+  @Get('all')
+  @HttpCode(HttpStatus.OK)
+  async findAll(): Promise<TOkResponse<{ likeAmount: number & Posts }[]>> {
+    return OkTransform(await this.postService.findAll({}));
+  }
+
   @Get(':slug')
   @HttpCode(HttpStatus.OK)
   async findOneBySlug(
@@ -53,5 +59,14 @@ export class PostController {
       undefined,
       HttpStatus.CREATED,
     );
+  }
+
+  @Post(':id/like')
+  @HttpCode(HttpStatus.OK)
+  async likePost(
+    @SessionUser() user: User,
+    @Query('id') id: number,
+  ): Promise<TOkResponse<Posts>> {
+    return OkTransform(await this.postService.likePost(id, user));
   }
 }

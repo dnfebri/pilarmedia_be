@@ -10,6 +10,7 @@ import {
 import { User } from './user.entity';
 import { CommentsPost } from './commentsPost.entity';
 import { generateRandomString } from 'src/shared/utils/random-string';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Posts extends EntityHelper {
@@ -28,6 +29,7 @@ export class Posts extends EntityHelper {
   @Column({ type: 'text' })
   tags: string;
 
+  @Expose({ groups: ['me'] })
   @Column({ type: 'text' })
   like: string;
 
