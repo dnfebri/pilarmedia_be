@@ -1,4 +1,4 @@
-import { EntityHelper } from 'src/shared/utils/entity-helper';
+import { AuditTrail, EntityHelper } from 'src/shared/utils/entity-helper';
 import {
   BeforeInsert,
   Column,
@@ -37,6 +37,9 @@ export class Posts extends EntityHelper {
   slugify() {
     this.slug = `${this.title.toLowerCase().replace(/ /g, '-')}-${generateRandomString(5)}`;
   }
+
+  @Column(() => AuditTrail, { prefix: false })
+  audit_trail: AuditTrail;
 
   @ManyToOne(() => User, (user) => user.posts)
   author: User;

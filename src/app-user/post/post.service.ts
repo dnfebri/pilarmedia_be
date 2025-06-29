@@ -5,6 +5,7 @@ import { PostCreateDto } from './dto/postCreate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { EntityCondition } from 'src/types/entity-condition.type';
+import { TFindAllPost } from './post.type';
 
 @Injectable()
 export class PostService {
@@ -31,19 +32,42 @@ export class PostService {
 
   async findAll(
     where: EntityCondition<Posts>,
-  ): Promise<{ likeAmount: number & Posts }[]> {
+    user: User,
+  ): Promise<TFindAllPost[]> {
     const posts = await this.postRepository.find({
       where,
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        content: true,
+        tags: true,
+        like: true,
+        author: {
+          id: true,
+          name: true,
+        },
+        audit_trail: {
+          created_at: true,
+        },
+      },
       order: {
         id: 'DESC',
       },
+      relations: {
+        author: true,
+      },
     });
 
-    return posts.map((post) => ({
-      ...post,
-      likeAmount: JSON.parse(post.like).length,
-      like: undefined,
-    }));
+    return posts.map(
+      (post) =>
+        ({
+          ...post,
+          likeAmount: JSON.parse(post.like).length,
+          isLiked: JSON.parse(post.like).includes(user.id),
+          like: undefined,
+        }) as TFindAllPost,
+    );
   }
 
   async createPost(postDto: PostCreateDto, user: User): Promise<Posts> {

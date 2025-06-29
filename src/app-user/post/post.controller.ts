@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Query,
+  SerializeOptions,
   UseGuards,
 } from '@nestjs/common';
 import { PostService } from './post.service';
@@ -16,6 +17,7 @@ import { SessionUser } from 'src/shared/decorators/user.decorator';
 import { User } from 'src/entities/user.entity';
 import { Posts } from 'src/entities/posts.entity';
 import { OkTransform, TOkResponse } from 'src/shared/utils/ok-response';
+import { TFindAllPost } from './post.type';
 
 @ApiBearerAuth()
 @UseGuards(AuthUserGuard)
@@ -36,8 +38,11 @@ export class PostController {
 
   @Get('all')
   @HttpCode(HttpStatus.OK)
-  async findAll(): Promise<TOkResponse<{ likeAmount: number & Posts }[]>> {
-    return OkTransform(await this.postService.findAll({}));
+  @SerializeOptions({ groups: ['admin'] })
+  async findAll(
+    @SessionUser() user: User,
+  ): Promise<TOkResponse<TFindAllPost[]>> {
+    return OkTransform(await this.postService.findAll({}, user));
   }
 
   @Get(':slug')

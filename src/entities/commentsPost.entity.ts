@@ -1,4 +1,4 @@
-import { EntityHelper } from 'src/shared/utils/entity-helper';
+import { AuditTrail, EntityHelper } from 'src/shared/utils/entity-helper';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Posts } from './posts.entity';
 import { User } from './user.entity';
@@ -13,6 +13,9 @@ export class CommentsPost extends EntityHelper {
 
   @Column({ type: 'text' })
   like: string;
+
+  @Column(() => AuditTrail, { prefix: false })
+  audit_trail: AuditTrail;
 
   @ManyToOne(() => Posts, (post) => post.comments)
   post: Posts;
