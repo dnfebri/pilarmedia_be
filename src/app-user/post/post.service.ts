@@ -47,6 +47,9 @@ export class PostService {
   }
 
   async createPost(postDto: PostCreateDto, user: User): Promise<Posts> {
+    if (!Array.isArray(postDto.tags)) {
+      throw new NotFoundException('tags is required as array');
+    }
     const tags = postDto.tags.join(',');
     return await this.postRepository.save(
       this.postRepository.create({
